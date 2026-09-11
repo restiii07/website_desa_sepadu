@@ -378,10 +378,6 @@ floatingObjects.forEach((object, index) => {
 console.log(
     "🌿 Website Desa Sepadu berhasil dimuat."
 );
-/* ==========================================
-   FORM ADUAN MASYARAKAT
-========================================== */
-
 const ADUAN_SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbz1HKPutb6U1anVjnHkFsLC_YMzWJe24x7fRvM27RMueAeMKk3nI8XXr0_cs5en6GXw/exec";
 
