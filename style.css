@@ -1923,349 +1923,320 @@ textarea {
     box-shadow:
         0 0 0 4px rgba(118, 81, 201, .10);
 }
+/* =========================================================
+   FIX FINAL - FORM ADUAN DESA SEPADU
+========================================================= */
 
+section.aduan-section {
+    display: block !important;
 
-/* =====================================================
-   ADUAN MASYARAKAT
-   STYLE SESUAI TEMA DESA SEPADU
-===================================================== */
+    width: 100% !important;
+    max-width: none !important;
 
-.aduan-section {
-    width: 100%;
-    max-width: none;
+    margin: 0 !important;
 
-    padding: 90px 7% 100px;
+    padding: 90px 7% 100px !important;
 
-    background:
-        linear-gradient(
-            180deg,
-            #f7f3ff 0%,
-            #ffffff 100%
-        );
+    background: linear-gradient(
+        180deg,
+        #f7f3ff 0%,
+        #ffffff 100%
+    ) !important;
 }
 
 
-/* ================= HEADER ================= */
+/* HEADER */
 
-.aduan-section .section-heading {
-    max-width: 800px;
-    margin: 0 auto 45px;
+section.aduan-section .section-heading {
+    display: block !important;
 
-    text-align: center;
+    width: 100% !important;
+    max-width: 800px !important;
+
+    margin: 0 auto 45px !important;
+
+    text-align: center !important;
 }
 
-.aduan-section .section-heading h2 {
-    font-size: clamp(32px, 4vw, 48px);
-    line-height: 1.2;
+section.aduan-section .section-heading h2 {
+    font-size: clamp(32px, 4vw, 48px) !important;
+
+    line-height: 1.2 !important;
+
+    margin: 0 !important;
 }
 
-.aduan-section .section-heading h2 span {
-    color: var(--primary);
+section.aduan-section .section-heading h2 span {
+    color: #7651c9 !important;
 }
 
-.aduan-section .section-heading > p {
-    max-width: 650px;
+section.aduan-section .section-heading > p {
+    display: block !important;
 
-    margin: 15px auto 0;
+    max-width: 650px !important;
 
-    color: var(--muted);
+    margin: 18px auto !important;
 
-    font-size: 13px;
+    color: #77738a !important;
 
-    line-height: 1.8;
-}
+    font-size: 13px !important;
 
-
-/* ================= CARD ================= */
-
-.aduan-card {
-    position: relative;
-
-    width: min(780px, 100%);
-
-    margin: 0 auto;
-
-    padding: 40px;
-
-    background: rgba(255, 255, 255, .95);
-
-    border-radius: 28px;
-
-    border: 1px solid rgba(118, 81, 201, .08);
-
-    box-shadow: var(--shadow);
-
-    overflow: hidden;
+    line-height: 1.8 !important;
 }
 
 
-/* dekorasi ungu */
+/* =========================================================
+   CARD
+========================================================= */
 
-.aduan-card::before {
-    content: "";
+section.aduan-section .aduan-card {
+    display: block !important;
 
-    position: absolute;
+    width: 800px !important;
+    max-width: 100% !important;
 
-    width: 180px;
-    height: 180px;
+    min-height: 0 !important;
 
-    top: -100px;
-    right: -70px;
+    margin: 0 auto !important;
 
-    background: var(--lavender);
+    padding: 40px !important;
 
-    border-radius: 50%;
+    background: #ffffff !important;
 
-    opacity: .7;
+    border: 1px solid #eee7ff !important;
 
-    pointer-events: none;
-}
-
-
-/* dekorasi daun */
-
-.aduan-card::after {
-    content: "🍃";
-
-    position: absolute;
-
-    right: 25px;
-    top: 22px;
-
-    font-size: 28px;
-
-    opacity: .6;
-
-    pointer-events: none;
-}
-
-
-/* ================= FORM ================= */
-
-.aduan-card form {
-    position: relative;
-
-    z-index: 2;
-
-    width: 100%;
-}
-
-
-/* ================= FORM GROUP ================= */
-
-.form-group {
-    width: 100%;
-
-    margin-bottom: 20px;
-}
-
-
-/* ================= LABEL ================= */
-
-.form-group label {
-    display: block;
-
-    margin-bottom: 7px;
-
-    color: var(--text);
-
-    font-size: 12px;
-
-    font-weight: 600;
-}
-
-
-/* ================= INPUT ================= */
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-
-    padding: 13px 15px;
-
-    border: 1px solid #e8e3f1;
-
-    border-radius: 13px;
-
-    outline: none;
-
-    background: #fbfaff;
-
-    color: var(--text);
-
-    font-family: "Poppins", sans-serif;
-
-    font-size: 13px;
-
-    transition: .3s ease;
-}
-
-
-/* ukuran input */
-
-.form-group input,
-.form-group select {
-    height: 50px;
-}
-
-
-/* textarea */
-
-.form-group textarea {
-    min-height: 150px;
-
-    resize: vertical;
-
-    line-height: 1.7;
-}
-
-
-/* placeholder */
-
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-    color: #aaa5b5;
-}
-
-
-/* ================= FOCUS ================= */
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    border-color: var(--primary);
-
-    background: #ffffff;
+    border-radius: 28px !important;
 
     box-shadow:
-        0 0 0 4px rgba(118, 81, 201, .10);
+        0 20px 50px rgba(89,61,139,.15) !important;
+
+    overflow: hidden !important;
+
+    position: relative !important;
 }
 
 
-/* ================= SELECT ================= */
+/* FORM */
 
-.form-group select {
-    cursor: pointer;
+section.aduan-section .aduan-card form {
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 0 !important;
 }
 
 
-/* ================= BUTTON ================= */
+/* GROUP */
 
-.aduan-card button[type="submit"] {
-    width: 100%;
+section.aduan-section .form-group {
+    display: block !important;
 
-    min-height: 52px;
+    width: 100% !important;
 
-    margin-top: 3px;
+    margin: 0 0 20px 0 !important;
 
-    border: none;
+    padding: 0 !important;
+}
 
-    border-radius: 15px;
 
-    color: white;
+/* LABEL */
 
-    background:
-        linear-gradient(
-            135deg,
-            var(--primary),
-            var(--secondary)
-        );
+section.aduan-section .form-group label {
+    display: block !important;
 
-    font-family: "Poppins", sans-serif;
+    width: 100% !important;
 
-    font-size: 13px;
+    margin: 0 0 8px 0 !important;
 
-    font-weight: 600;
+    color: #29263a !important;
 
-    cursor: pointer;
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 13px !important;
+
+    font-weight: 600 !important;
+}
+
+
+/* INPUT / SELECT / TEXTAREA */
+
+section.aduan-section .form-group input,
+section.aduan-section .form-group select,
+section.aduan-section .form-group textarea {
+
+    display: block !important;
+
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    margin: 0 !important;
+
+    padding: 14px 16px !important;
+
+    border: 1px solid #e4deed !important;
+
+    border-radius: 13px !important;
+
+    outline: none !important;
+
+    background: #fbfaff !important;
+
+    color: #29263a !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 13px !important;
+
+    box-shadow: none !important;
+
+    transition: .3s ease !important;
+}
+
+
+/* INPUT */
+
+section.aduan-section .form-group input,
+section.aduan-section .form-group select {
+
+    height: 52px !important;
+}
+
+
+/* TEXTAREA */
+
+section.aduan-section .form-group textarea {
+
+    height: auto !important;
+
+    min-height: 150px !important;
+
+    resize: vertical !important;
+
+    line-height: 1.7 !important;
+}
+
+
+/* FOCUS */
+
+section.aduan-section .form-group input:focus,
+section.aduan-section .form-group select:focus,
+section.aduan-section .form-group textarea:focus {
+
+    border-color: #7651c9 !important;
+
+    background: #ffffff !important;
 
     box-shadow:
-        0 12px 25px rgba(118, 81, 201, .25);
-
-    transition: .3s ease;
+        0 0 0 4px rgba(118,81,201,.10) !important;
 }
 
 
-.aduan-card button[type="submit"]:hover {
-    transform: translateY(-3px);
+/* BUTTON */
+
+section.aduan-section .aduan-card button[type="submit"] {
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    width: 100% !important;
+
+    height: 52px !important;
+
+    margin: 5px 0 0 0 !important;
+
+    padding: 0 20px !important;
+
+    border: none !important;
+
+    border-radius: 15px !important;
+
+    background: linear-gradient(
+        135deg,
+        #7651c9,
+        #a98bea
+    ) !important;
+
+    color: #ffffff !important;
+
+    font-family: "Poppins", sans-serif !important;
+
+    font-size: 13px !important;
+
+    font-weight: 600 !important;
+
+    cursor: pointer !important;
 
     box-shadow:
-        0 17px 32px rgba(118, 81, 201, .35);
+        0 12px 25px rgba(118,81,201,.25) !important;
+
+    transition: .3s ease !important;
+}
+
+section.aduan-section .aduan-card button[type="submit"]:hover {
+
+    transform: translateY(-3px) !important;
+
+    box-shadow:
+        0 17px 32px rgba(118,81,201,.35) !important;
 }
 
 
-.aduan-card button[type="submit"]:active {
-    transform: translateY(0);
+/* MESSAGE */
+
+section.aduan-section #aduanMessage {
+
+    display: block !important;
+
+    width: 100% !important;
+
+    margin: 15px 0 0 0 !important;
+
+    text-align: center !important;
+
+    color: #7651c9 !important;
+
+    font-size: 13px !important;
 }
 
 
-/* ================= PESAN ================= */
-
-#aduanMessage {
-    margin-top: 15px;
-
-    text-align: center;
-
-    font-size: 13px;
-
-    color: var(--primary);
-}
-
-
-/* =====================================================
-   RESPONSIVE
-===================================================== */
-
-@media (max-width: 900px) {
-
-    .aduan-section {
-        padding-left: 5%;
-        padding-right: 5%;
-    }
-
-    .aduan-card {
-        max-width: 700px;
-    }
-
-}
-
+/* =========================================================
+   HP
+========================================================= */
 
 @media (max-width: 600px) {
 
-    .aduan-section {
-        padding: 65px 5% 75px;
+    section.aduan-section {
+
+        padding: 65px 5% 75px !important;
     }
 
-    .aduan-section .section-heading {
-        margin-bottom: 30px;
+    section.aduan-section .section-heading h2 {
+
+        font-size: 32px !important;
     }
 
-    .aduan-section .section-heading h2 {
-        font-size: 32px;
+    section.aduan-section .aduan-card {
+
+        width: 100% !important;
+
+        padding: 25px 20px !important;
+
+        border-radius: 23px !important;
     }
 
-    .aduan-section .section-heading > p {
-        font-size: 12px;
+    section.aduan-section .form-group input,
+    section.aduan-section .form-group select {
+
+        height: 50px !important;
     }
 
-    .aduan-card {
-        padding: 25px 20px;
+    section.aduan-section .form-group textarea {
 
-        border-radius: 23px;
+        min-height: 140px !important;
     }
-
-    .form-group {
-        margin-bottom: 17px;
-    }
-
-    .form-group input,
-    .form-group select {
-        height: 50px;
-    }
-
-    .form-group textarea {
-        min-height: 140px;
-    }
-
 }
