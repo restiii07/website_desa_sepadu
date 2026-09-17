@@ -1,0 +1,1295 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin - Desa Sepadu</title>
+
+    <!-- FAVICON -->
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- ICON HP -->
+    <link rel="apple-touch-icon" href="favicon.png">
+
+    <meta
+        name="apple-mobile-web-app-title"
+        content="Desa Sepadu"
+    >
+
+    <meta
+        name="application-name"
+        content="Desa Sepadu"
+    >
+
+
+    <style>
+
+        /* =========================================
+           DASAR
+        ========================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+
+            background: #f8f7fc;
+
+            color: #403747;
+
+            min-height: 100vh;
+        }
+
+
+
+        /* =========================================
+           LANGIT / BACKGROUND
+        ========================================= */
+
+        .sky {
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 250px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #dff3ff 0%,
+                    #eef8ff 55%,
+                    #f8f7fc 100%
+                );
+
+            z-index: -2;
+
+            overflow: hidden;
+        }
+
+
+        .sun {
+            position: absolute;
+
+            width: 75px;
+            height: 75px;
+
+            right: 10%;
+            top: 35px;
+
+            background: #ffe39a;
+
+            border-radius: 50%;
+
+            box-shadow:
+                0 0 35px rgba(255, 220, 130, .45);
+        }
+
+
+        .cloud {
+            position: absolute;
+
+            width: 120px;
+            height: 35px;
+
+            background: rgba(255,255,255,.85);
+
+            border-radius: 30px;
+        }
+
+
+        .cloud::before,
+        .cloud::after {
+            content: "";
+
+            position: absolute;
+
+            background: white;
+
+            border-radius: 50%;
+        }
+
+
+        .cloud::before {
+            width: 50px;
+            height: 50px;
+
+            left: 20px;
+            bottom: 5px;
+        }
+
+
+        .cloud::after {
+            width: 65px;
+            height: 65px;
+
+            right: 18px;
+            bottom: 0;
+        }
+
+
+        .cloud1 {
+            top: 60px;
+            left: 10%;
+        }
+
+
+        .cloud2 {
+            top: 130px;
+            right: 25%;
+            transform: scale(.8);
+        }
+
+
+        .bird {
+            position: absolute;
+
+            color: #7893a5;
+
+            font-size: 28px;
+
+            opacity: .6;
+        }
+
+
+        .bird1 {
+            top: 90px;
+            left: 45%;
+        }
+
+
+        .bird2 {
+            top: 120px;
+            left: 52%;
+        }
+
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        header {
+            width: 100%;
+
+            padding: 18px 7%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            background: rgba(255,255,255,.90);
+
+            backdrop-filter: blur(10px);
+
+            border-bottom: 1px solid #eee8f2;
+
+            position: relative;
+
+            z-index: 10;
+        }
+
+
+        .logo {
+            font-size: 20px;
+
+            font-weight: 700;
+
+            color: #41364c;
+
+            letter-spacing: .5px;
+        }
+
+
+        .logo::first-letter {
+            font-size: 23px;
+        }
+
+
+        nav {
+            display: flex;
+
+            gap: 8px;
+        }
+
+
+        nav a {
+            text-decoration: none;
+
+            color: #68606f;
+
+            font-size: 14px;
+
+            padding: 9px 13px;
+
+            border-radius: 9px;
+
+            transition: .25s;
+        }
+
+
+        nav a:hover {
+            color: #74469a;
+
+            background: #f4edf8;
+        }
+
+
+        nav a.active {
+            color: #74469a;
+
+            background: #eee3f7;
+
+            font-weight: 600;
+        }
+
+
+
+        /* =========================================
+           KONTEN
+        ========================================= */
+
+        .content {
+            width: 100%;
+
+            max-width: 1150px;
+
+            margin: 50px auto;
+
+            padding: 0 20px;
+        }
+
+
+
+        /* =========================================
+           ADMIN BOX
+        ========================================= */
+
+        .admin-box {
+
+            width: 100%;
+
+            max-width: 1100px;
+
+            margin: 0 auto;
+
+            padding: 30px;
+
+            background: rgba(255,255,255,.96);
+
+            border: 1px solid #eadff1;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 15px 35px rgba(80, 55, 100, .08);
+        }
+
+
+
+        /* =========================================
+           JUDUL
+        ========================================= */
+
+        .admin-title {
+
+            text-align: center;
+
+            color: #74469a;
+
+            margin-bottom: 25px;
+
+            font-size: 28px;
+        }
+
+
+
+        /* =========================================
+           LOGIN
+        ========================================= */
+
+        .login-box {
+
+            max-width: 450px;
+
+            margin: 20px auto;
+
+            text-align: center;
+
+            padding: 25px;
+        }
+
+
+        .login-box p {
+            color: #77707d;
+
+            margin-bottom: 10px;
+        }
+
+
+        .login-box input {
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin: 10px 0;
+
+            border: 2px solid #e3d9e9;
+
+            border-radius: 12px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            background: #fff;
+
+            color: #514958;
+
+            transition: .2s;
+        }
+
+
+        .login-box input:focus {
+
+            border-color: #a27bb8;
+
+            box-shadow:
+                0 0 0 3px #f5eef8;
+        }
+
+
+        .login-box button {
+
+            padding: 13px 25px;
+
+            background: #8053a0;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 12px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+
+        .login-box button:hover {
+
+            background: #70448f;
+
+            transform: translateY(-1px);
+        }
+
+
+        #loginStatus {
+
+            margin-top: 15px;
+
+            color: #c95d78;
+
+            font-weight: bold;
+        }
+
+
+
+        /* =========================================
+           ADMIN CONTENT
+        ========================================= */
+
+        .admin-content {
+
+            display: none;
+        }
+
+
+
+        /* =========================================
+           HEADER ADMIN
+        ========================================= */
+
+        .admin-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .admin-header-text span {
+
+            color: #9876ae;
+
+            font-size: 10px;
+
+            letter-spacing: 2px;
+        }
+
+
+        .admin-header-text h1 {
+
+            margin-top: 5px;
+
+            color: #403747;
+
+            font-size: 25px;
+        }
+
+
+        .admin-user {
+
+            padding: 10px 16px;
+
+            border-radius: 30px;
+
+            background: #f4edf8;
+
+            color: #74469a;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+
+        /* =========================================
+           LOGOUT
+        ========================================= */
+
+        .logout-button {
+
+            float: right;
+
+            padding: 10px 18px;
+
+            background: #c95d78;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            transition: .25s;
+        }
+
+
+        .logout-button:hover {
+
+            background: #8053a0;
+        }
+
+
+
+        /* =========================================
+           STATISTIK
+        ========================================= */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 15px;
+
+            margin: 25px 0;
+        }
+
+
+        .stat-card {
+
+            padding: 20px;
+
+            background: #faf8fc;
+
+            border: 1px solid #eee8f2;
+
+            border-radius: 15px;
+
+            text-align: center;
+        }
+
+
+        .stat-card span {
+
+            display: block;
+
+            color: #958d9c;
+
+            font-size: 12px;
+
+            margin-bottom: 6px;
+        }
+
+
+        .stat-card strong {
+
+            color: #74469a;
+
+            font-size: 25px;
+        }
+
+
+
+        /* =========================================
+           DATA STATUS
+        ========================================= */
+
+        .data-status {
+
+            margin-top: 15px;
+
+            margin-bottom: 10px;
+
+            text-align: center;
+
+            color: #74469a;
+
+            font-weight: bold;
+        }
+
+
+
+        /* =========================================
+           TABLE
+        ========================================= */
+
+        .table-wrapper {
+
+            width: 100%;
+
+            overflow-x: auto;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin-top: 20px;
+
+            background: white;
+
+            border-radius: 12px;
+
+            overflow: hidden;
+        }
+
+
+        th {
+
+            background: #8053a0;
+
+            color: white;
+
+            padding: 13px;
+
+            text-align: left;
+
+            font-size: 13px;
+        }
+
+
+        td {
+
+            padding: 13px;
+
+            border-bottom: 1px solid #eee8f2;
+
+            color: #5f5766;
+
+            font-size: 13px;
+        }
+
+
+        tr:hover {
+
+            background: #fcfaff;
+        }
+
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        footer {
+
+            text-align: center;
+
+            padding: 30px 20px;
+
+            margin-top: 50px;
+
+            background: #ffffff;
+
+            border-top: 1px solid #eee8f2;
+
+            color: #817887;
+
+            font-size: 13px;
+
+            line-height: 1.8;
+        }
+
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 800px) {
+
+            header {
+
+                padding: 16px 20px;
+
+                flex-direction: column;
+
+                gap: 12px;
+            }
+
+
+            nav {
+
+                flex-wrap: wrap;
+
+                justify-content: center;
+            }
+
+
+            .content {
+
+                margin-top: 30px;
+            }
+
+
+            .admin-box {
+
+                padding: 20px 15px;
+            }
+
+
+            .stats {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .admin-header {
+
+                flex-direction: column;
+
+                gap: 15px;
+
+                text-align: center;
+            }
+
+
+            .admin-user {
+
+                align-self: center;
+            }
+
+
+            table {
+
+                font-size: 13px;
+            }
+
+
+            th,
+            td {
+
+                padding: 9px;
+            }
+        }
+
+
+        @media (max-width: 500px) {
+
+            .logo {
+
+                font-size: 18px;
+            }
+
+
+            nav a {
+
+                font-size: 12px;
+
+                padding: 7px 9px;
+            }
+
+
+            .admin-title {
+
+                font-size: 22px;
+            }
+
+
+            .login-box {
+
+                padding: 10px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- LANGIT -->
+
+    <div class="sky">
+
+        <div class="sun"></div>
+
+        <div class="cloud cloud1"></div>
+
+        <div class="cloud cloud2"></div>
+
+        <div class="bird bird1">⌁</div>
+
+        <div class="bird bird2">⌁</div>
+
+    </div>
+
+
+
+    <!-- HEADER -->
+
+    <header>
+
+        <div class="logo">
+            🏡 DESA SEPADU
+        </div>
+
+
+        <nav>
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="profil.html">
+                Profil
+            </a>
+
+            <a href="kehidupan.html">
+                Kehidupan
+            </a>
+
+            <a href="budaya.html">
+                Budaya
+            </a>
+
+            <a href="kontak.html">
+                Kontak
+            </a>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- KONTEN -->
+
+    <main class="content">
+
+
+        <div class="admin-box">
+
+
+            <!-- LOGIN -->
+
+            <div
+                id="loginBox"
+                class="login-box"
+            >
+
+                <h1 class="admin-title">
+                    🔐 Admin Desa Sepadu
+                </h1>
+
+
+                <p>
+                    Silakan masukkan password admin.
+                </p>
+
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Masukkan password"
+                >
+
+
+                <button onclick="login()">
+                    🔓 Masuk
+                </button>
+
+
+                <p id="loginStatus"></p>
+
+            </div>
+
+
+
+            <!-- DATA ADMIN -->
+
+            <div
+                id="adminContent"
+                class="admin-content"
+            >
+
+
+                <button
+                    class="logout-button"
+                    onclick="logout()"
+                >
+                    Keluar
+                </button>
+
+
+                <div class="admin-header">
+
+                    <div class="admin-header-text">
+
+                        <span>
+                            ADMIN PANEL
+                        </span>
+
+                        <h1>
+                            📋 Data Pesan Pengunjung
+                        </h1>
+
+                    </div>
+
+
+                    <div class="admin-user">
+                        👤 Admin
+                    </div>
+
+                </div>
+
+
+
+                <!-- STATISTIK -->
+
+                <div class="stats">
+
+                    <div class="stat-card">
+
+                        <span>
+                            Total Pesan
+                        </span>
+
+                        <strong id="totalData">
+                            0
+                        </strong>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span>
+                            Desa
+                        </span>
+
+                        <strong>
+                            🏡
+                        </strong>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <span>
+                            Status
+                        </span>
+
+                        <strong>
+                            ✓
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+
+                <div
+                    id="dataStatus"
+                    class="data-status"
+                >
+                    ⏳ Mengambil data...
+                </div>
+
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    ID
+                                </th>
+
+                                <th>
+                                    Waktu
+                                </th>
+
+                                <th>
+                                    Nama
+                                </th>
+
+                                <th>
+                                    Email
+                                </th>
+
+                                <th>
+                                    Subjek
+                                </th>
+
+                                <th>
+                                    Pesan
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="dataTable">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+            © <span id="tahun"></span>
+            Desa Sepadu • Dusun Seladu
+        </p>
+
+        <p>
+            Kecamatan Semparuk,
+            Kabupaten Sambas,
+            Kalimantan Barat
+        </p>
+
+    </footer>
+
+
+
+    <script>
+
+
+        /* =========================================
+           PENGATURAN ADMIN
+        ========================================= */
+
+
+        const ADMIN_PASSWORD = "admin123";
+
+
+        /*
+           GANTI URL INI JIKA GOOGLE APPS SCRIPT
+           KAMU SUDAH MEMILIKI URL SENDIRI.
+        */
+
+        const SCRIPT_URL =
+            "https://script.google.com/macros/s/AKfycbz1HKPutb6U1anVjnHkFsLC_YMzWJe24x7fRvM27RMueAeMKk3nI8XXr0_cs5en6GXw/exec";
+
+
+
+        /* =========================================
+           TAHUN
+        ========================================= */
+
+        document.getElementById("tahun").textContent =
+            new Date().getFullYear();
+
+
+
+        /* =========================================
+           LOGIN
+        ========================================= */
+
+        function login() {
+
+            const password =
+                document.getElementById("password").value;
+
+
+            const status =
+                document.getElementById("loginStatus");
+
+
+            if (password === ADMIN_PASSWORD) {
+
+                document.getElementById("loginBox").style.display =
+                    "none";
+
+
+                document.getElementById("adminContent").style.display =
+                    "block";
+
+
+                loadData();
+
+            } else {
+
+                status.textContent =
+                    "❌ Password salah.";
+
+            }
+
+        }
+
+
+
+        /* =========================================
+           AMBIL DATA GOOGLE SHEETS
+        ========================================= */
+
+        function loadData() {
+
+            const status =
+                document.getElementById("dataStatus");
+
+
+            const table =
+                document.getElementById("dataTable");
+
+
+            const total =
+                document.getElementById("totalData");
+
+
+            status.textContent =
+                "⏳ Mengambil data...";
+
+
+            fetch(SCRIPT_URL)
+
+
+                .then(function(response) {
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Gagal menghubungi server."
+                        );
+
+                    }
+
+                    return response.json();
+
+                })
+
+
+                .then(function(data) {
+
+                    table.innerHTML = "";
+
+
+                    if (!data || data.length === 0) {
+
+                        total.textContent = "0";
+
+
+                        status.textContent =
+                            "Belum ada pesan dari pengunjung.";
+
+                        return;
+
+                    }
+
+
+                    total.textContent =
+                        data.length;
+
+
+                    data.reverse().forEach(
+                        function(item) {
+
+
+                            const row =
+                                document.createElement("tr");
+
+
+                            row.innerHTML = `
+
+                                <td>
+                                    ${item.id || ""}
+                                </td>
+
+                                <td>
+                                    ${item.waktu || ""}
+                                </td>
+
+                                <td>
+                                    ${item.nama || ""}
+                                </td>
+
+                                <td>
+                                    ${item.email || ""}
+                                </td>
+
+                                <td>
+                                    ${item.subjek || ""}
+                                </td>
+
+                                <td>
+                                    ${item.pesan || ""}
+                                </td>
+
+                            `;
+
+
+                            table.appendChild(row);
+
+                        }
+                    );
+
+
+                    status.textContent =
+                        "✅ Data berhasil dimuat.";
+
+                })
+
+
+                .catch(function(error) {
+
+                    console.error(error);
+
+
+                    status.textContent =
+                        "❌ Gagal mengambil data. Periksa URL Google Apps Script.";
+
+                });
+
+        }
+
+
+
+        /* =========================================
+           LOGOUT
+        ========================================= */
+
+        function logout() {
+
+            document.getElementById(
+                "adminContent"
+            ).style.display = "none";
+
+
+            document.getElementById(
+                "loginBox"
+            ).style.display = "block";
+
+
+            document.getElementById(
+                "password"
+            ).value = "";
+
+
+            document.getElementById(
+                "loginStatus"
+            ).textContent = "";
+
+        }
+
+
+
+        /* =========================================
+           ENTER UNTUK LOGIN
+        ========================================= */
+
+        document
+            .getElementById("password")
+            .addEventListener(
+                "keypress",
+                function(event) {
+
+                    if (event.key === "Enter") {
+
+                        login();
+
+                    }
+
+                }
+            );
+
+    </script>
+
+
+</body>
+
+</html>
+```
