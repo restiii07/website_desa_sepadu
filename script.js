@@ -1,15 +1,7 @@
 /* =====================================================
    DESA SEPADU
-   JAVASCRIPT INTERACTIVE + GOOGLE APPS SCRIPT
+   JAVASCRIPT INTERACTIVE
 ===================================================== */
-
-
-/* =====================================================
-   GOOGLE APPS SCRIPT
-===================================================== */
-
-const SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbxUz1itR8UKz91UzOSaLfVtet-JTFevTe8wrtTh4Q23i5x2sUHV-U9NYAMR_CeODmpl/exec";
 
 
 /* ================= NAVBAR ================= */
@@ -29,11 +21,8 @@ window.addEventListener("scroll", () => {
 
 /* ================= MOBILE MENU ================= */
 
-const menuToggle =
-    document.getElementById("menuToggle");
-
-const navMenu =
-    document.getElementById("navMenu");
+const menuToggle = document.getElementById("menuToggle");
+const navMenu = document.getElementById("navMenu");
 
 if (menuToggle && navMenu) {
 
@@ -67,34 +56,30 @@ if (menuToggle && navMenu) {
 
 /* ================= SCROLL REVEAL ================= */
 
-const revealElements =
-    document.querySelectorAll(
-        ".reveal, .reveal-left, .reveal-right"
-    );
+const revealElements = document.querySelectorAll(
+    ".reveal, .reveal-left, .reveal-right"
+);
 
-const revealObserver =
-    new IntersectionObserver(
-        entries => {
+const revealObserver = new IntersectionObserver(
+    entries => {
 
-            entries.forEach(entry => {
+        entries.forEach(entry => {
 
-                if (entry.isIntersecting) {
+            if (entry.isIntersecting) {
 
-                    entry.target.classList.add("show");
+                entry.target.classList.add("show");
 
-                    revealObserver.unobserve(
-                        entry.target
-                    );
+                revealObserver.unobserve(entry.target);
 
-                }
+            }
 
-            });
+        });
 
-        },
-        {
-            threshold: 0.12
-        }
-    );
+    },
+    {
+        threshold: 0.12
+    }
+);
 
 
 revealElements.forEach(element => {
@@ -106,15 +91,13 @@ revealElements.forEach(element => {
 
 /* ================= 3D CARD TILT ================= */
 
-const tiltCards =
-    document.querySelectorAll(".tilt-card");
+const tiltCards = document.querySelectorAll(".tilt-card");
 
 tiltCards.forEach(card => {
 
     card.addEventListener("mousemove", event => {
 
-        const rect =
-            card.getBoundingClientRect();
+        const rect = card.getBoundingClientRect();
 
         const x =
             event.clientX - rect.left;
@@ -187,8 +170,7 @@ document.querySelectorAll(".btn").forEach(button => {
 
         ripple.style.position = "absolute";
         ripple.style.borderRadius = "50%";
-        ripple.style.background =
-            "rgba(255,255,255,.5)";
+        ripple.style.background = "rgba(255,255,255,.5)";
         ripple.style.width = "10px";
         ripple.style.height = "10px";
         ripple.style.transform = "scale(0)";
@@ -223,9 +205,7 @@ document.querySelectorAll(".btn").forEach(button => {
         );
 
         setTimeout(() => {
-
             ripple.remove();
-
         }, 650);
 
     });
@@ -269,284 +249,54 @@ if (backTop) {
 }
 
 
-/* =====================================================
-   FORM ADUAN MASYARAKAT
-===================================================== */
-
-const aduanForm =
-    document.getElementById("aduanForm");
-
-
-if (aduanForm) {
-
-    aduanForm.addEventListener(
-        "submit",
-        async event => {
-
-            event.preventDefault();
-
-
-            const nama =
-                document.getElementById("nama")?.value.trim();
-
-            const kategori =
-                document.getElementById("kategori")?.value.trim();
-
-            const judul =
-                document.getElementById("judul")?.value.trim();
-
-            const isi =
-                document.getElementById("isi")?.value.trim();
-
-
-            /* VALIDASI */
-
-            if (
-                !nama ||
-                !kategori ||
-                !judul ||
-                !isi
-            ) {
-
-                alert(
-                    "Mohon lengkapi semua data aduan terlebih dahulu."
-                );
-
-                return;
-
-            }
-
-
-            /* TOMBOL */
-
-            const tombol =
-                aduanForm.querySelector(
-                    'button[type="submit"]'
-                );
-
-
-            if (tombol) {
-
-                tombol.disabled = true;
-
-                tombol.textContent =
-                    "Mengirim...";
-
-            }
-
-
-            /* DATA YANG DIKIRIM */
-
-            const data = {
-
-                nama: nama,
-
-                kategori: kategori,
-
-                judul: judul,
-
-                pesan: isi
-
-            };
-
-
-            try {
-
-                await fetch(
-                    SCRIPT_URL,
-                    {
-                        method: "POST",
-
-                        mode: "no-cors",
-
-                        headers: {
-                            "Content-Type":
-                                "text/plain;charset=utf-8"
-                        },
-
-                        body:
-                            JSON.stringify(data)
-                    }
-                );
-
-
-                /* BERHASIL */
-
-                alert(
-                    "✅ Aduan berhasil dikirim!\n\n" +
-                    "Terima kasih telah menyampaikan aduan kepada Desa Sepadu."
-                );
-
-
-                aduanForm.reset();
-
-
-            } catch (error) {
-
-                console.error(
-                    "Error mengirim aduan:",
-                    error
-                );
-
-
-                alert(
-                    "❌ Aduan gagal dikirim.\n\n" +
-                    "Silakan coba lagi."
-                );
-
-            }
-
-
-            if (tombol) {
-
-                tombol.disabled = false;
-
-                tombol.textContent =
-                    "Kirim Aduan";
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   FORM KONTAK
-===================================================== */
+/* ================= FORM ================= */
 
 const contactForm =
     document.getElementById("contactForm");
 
-
 if (contactForm) {
 
-    contactForm.addEventListener(
-        "submit",
-        async event => {
+    contactForm.addEventListener("submit", event => {
 
-            event.preventDefault();
+        event.preventDefault();
 
+        const nama =
+            document.getElementById("nama").value.trim();
 
-            const nama =
-                document.getElementById("nama")?.value.trim();
+        const email =
+            document.getElementById("email").value.trim();
 
-            const email =
-                document.getElementById("email")?.value.trim();
+        const subjek =
+            document.getElementById("subjek").value.trim();
 
-            const subjek =
-                document.getElementById("subjek")?.value.trim();
-
-            const pesan =
-                document.getElementById("pesan")?.value.trim();
+        const pesan =
+            document.getElementById("pesan").value.trim();
 
 
-            /* VALIDASI */
+        if (
+            !nama ||
+            !email ||
+            !subjek ||
+            !pesan
+        ) {
 
-            if (
-                !nama ||
-                !email ||
-                !subjek ||
-                !pesan
-            ) {
+            alert(
+                "Mohon lengkapi semua data terlebih dahulu."
+            );
 
-                alert(
-                    "Mohon lengkapi semua data terlebih dahulu."
-                );
-
-                return;
-
-            }
-
-
-            const tombol =
-                contactForm.querySelector(
-                    'button[type="submit"]'
-                );
-
-
-            if (tombol) {
-
-                tombol.disabled = true;
-
-                tombol.textContent =
-                    "Mengirim...";
-
-            }
-
-
-            /* DATA KONTAK */
-
-            const data = {
-
-                nama: nama,
-
-                email: email,
-
-                subjek: subjek,
-
-                pesan: pesan
-
-            };
-
-
-            try {
-
-                await fetch(
-                    SCRIPT_URL,
-                    {
-                        method: "POST",
-
-                        mode: "no-cors",
-
-                        headers: {
-                            "Content-Type":
-                                "text/plain;charset=utf-8"
-                        },
-
-                        body:
-                            JSON.stringify(data)
-                    }
-                );
-
-
-                alert(
-                    "✅ Pesan berhasil dikirim!\n\n" +
-                    "Terima kasih telah menghubungi Desa Sepadu."
-                );
-
-
-                contactForm.reset();
-
-
-            } catch (error) {
-
-                console.error(
-                    "Error mengirim pesan:",
-                    error
-                );
-
-
-                alert(
-                    "❌ Pesan gagal dikirim.\n\n" +
-                    "Silakan coba lagi."
-                );
-
-            }
-
-
-            if (tombol) {
-
-                tombol.disabled = false;
-
-                tombol.textContent =
-                    "Kirim Pesan";
-
-            }
+            return;
 
         }
-    );
+
+
+        alert(
+            "Pesan berhasil disiapkan! Terima kasih telah menghubungi Desa Sepadu."
+        );
+
+
+        contactForm.reset();
+
+    });
 
 }
 
@@ -604,9 +354,7 @@ document.querySelectorAll(".nav-menu a")
             currentPage === "home" &&
             href === "index.html"
         ) {
-
             link.classList.add("active");
-
         }
 
     });
@@ -619,7 +367,6 @@ const floatingObjects =
         ".floating-leaf, .flower, .cloud"
     );
 
-
 floatingObjects.forEach((object, index) => {
 
     object.style.animationDelay =
@@ -628,14 +375,53 @@ floatingObjects.forEach((object, index) => {
 });
 
 
-/* =====================================================
-   SELESAI
-===================================================== */
-
 console.log(
     "🌿 Website Desa Sepadu berhasil dimuat."
 );
+const ADUAN_SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbz1HKPutb6U1anVjnHkFsLC_YMzWJe24x7fRvM27RMueAeMKk3nI8XXr0_cs5en6GXw/exec";
 
-console.log(
-    "📨 Sistem pengiriman aduan & pesan siap digunakan."
-);
+const aduanForm = document.getElementById("aduanForm");
+const aduanMessage = document.getElementById("aduanMessage");
+
+if (aduanForm) {
+    aduanForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const submitButton = aduanForm.querySelector(
+            "button[type='submit']"
+        );
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Mengirim...";
+
+        const formData = new FormData(aduanForm);
+
+        try {
+            await fetch(ADUAN_SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                body: new URLSearchParams(formData)
+            });
+
+            aduanMessage.textContent =
+                "Aduan berhasil dikirim. Terima kasih sudah menyampaikan laporan.";
+
+            aduanMessage.style.color = "#315b45";
+
+            aduanForm.reset();
+
+        } catch (error) {
+            aduanMessage.textContent =
+                "Aduan gagal dikirim. Silakan coba lagi.";
+
+            aduanMessage.style.color = "#b33a3a";
+
+            console.error("Error:", error);
+
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = "Kirim Aduan →";
+        }
+    });
+}
