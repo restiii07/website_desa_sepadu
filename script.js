@@ -60,7 +60,8 @@ const revealElements = document.querySelectorAll(
     ".reveal, .reveal-left, .reveal-right"
 );
 
-const revealObserver = new IntersectionObserver(
+const revealObserver = ("IntersectionObserver" in window)
+    ? new IntersectionObserver(
     entries => {
 
         entries.forEach(entry => {
@@ -78,14 +79,14 @@ const revealObserver = new IntersectionObserver(
     },
     {
         threshold: 0.12
-    }
-);
-
+    })
+    : null;
 
 revealElements.forEach(element => {
-
-    revealObserver.observe(element);
-
+    if (revealObserver) {
+        revealObserver.observe(element);
+    }
+    element.classList.add("show");
 });
 
 
@@ -440,7 +441,7 @@ function escapeHtml(str) { return String(str).replace(/[&<>'"]/g, c => ({"&":"&a
 /* Admin page */
 const adminLogin = document.getElementById("adminLogin");
 if (adminLogin) {
-    adminLogin.addEventListener("submit", e => {
+    adminLogin.addEventListener("submit", async e => {
         e.preventDefault();
         const pass = document.getElementById("adminPassword").value;
         const loginMessage = document.getElementById("loginMessage");

@@ -1361,7 +1361,7 @@ textarea {
 .reveal,
 .reveal-left,
 .reveal-right {
-    opacity: 0;
+    opacity: 1;
     transition:
         opacity .8s ease,
         transform .8s ease;
