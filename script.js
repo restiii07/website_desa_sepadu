@@ -384,7 +384,6 @@ console.log(
    SISTEM ADUAN + TOKEN + ADMIN
 ===================================================== */
 const ADUAN_SCRIPT_URL = "GANTI_DENGAN_URL_WEB_APP_GOOGLE_APPS_SCRIPT";
-const ADMIN_PASSWORD = "Sepadu2026!";
 
 function buatToken() {
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -444,12 +443,20 @@ if (adminLogin) {
     adminLogin.addEventListener("submit", e => {
         e.preventDefault();
         const pass = document.getElementById("adminPassword").value;
-        if (pass === ADMIN_PASSWORD) {
+        const loginMessage = document.getElementById("loginMessage");
+        loginMessage.textContent = "Memeriksa password...";
+        try {
+            const res = await fetch(`${ADUAN_SCRIPT_URL}?action=list&password=${encodeURIComponent(pass)}`);
+            const rows = await res.json();
+            if (!Array.isArray(rows)) throw new Error("unauthorized");
             sessionStorage.setItem("sepaduAdmin", "1");
+            sessionStorage.setItem("sepaduAdminPassword", pass);
             document.getElementById("loginPanel").style.display = "none";
             document.getElementById("adminPanel").style.display = "block";
-            loadAduanAdmin();
-        } else document.getElementById("loginMessage").textContent = "Password salah.";
+            renderAduanAdmin(rows);
+        } catch (err) {
+            loginMessage.textContent = "Password salah atau koneksi server belum disiapkan.";
+        }
     });
 }
 
@@ -457,23 +464,34 @@ async function loadAduanAdmin() {
     const box = document.getElementById("adminList"); if (!box) return;
     box.innerHTML = "Memuat data aduan...";
     try {
-        const res = await fetch(`${ADUAN_SCRIPT_URL}?action=list&password=${encodeURIComponent(ADMIN_PASSWORD)}`);
+        const pass = sessionStorage.getItem("sepaduAdminPassword");
+        if (!pass) { box.innerHTML = "Silakan login terlebih dahulu."; return; }
+        const res = await fetch(`${ADUAN_SCRIPT_URL}?action=list&password=${encodeURIComponent(pass)}`);
         const rows = await res.json();
-        if (!Array.isArray(rows) || !rows.length) { box.innerHTML = "Belum ada aduan."; return; }
-        box.innerHTML = rows.map((r,i) => `<article class="admin-aduan"><div class="admin-head"><span>${escapeHtml(r.token)}</span><b>${escapeHtml(r.status)}</b></div><h3>${escapeHtml(r.judul)}</h3><p><b>Nama:</b> ${escapeHtml(r.nama)} &nbsp; <b>Kategori:</b> ${escapeHtml(r.kategori)}</p><p>${escapeHtml(r.isi_aduan)}</p><textarea id="jawaban-${i}" placeholder="Tulis jawaban untuk masyarakat...">${escapeHtml(r.jawaban || "")}</textarea><button class="btn btn-primary" onclick="jawabAduan('${encodeURIComponent(r.token)}', ${i})">Simpan Jawaban</button></article>`).join("");
+        if (!Array.isArray(rows)) throw new Error("unauthorized");
+        renderAduanAdmin(rows);
     } catch(e) { box.innerHTML = "Gagal mengambil data. Periksa URL Web App."; }
+}
+
+function renderAduanAdmin(rows) {
+    const box = document.getElementById("adminList");
+    if (!rows.length) { box.innerHTML = "Belum ada aduan."; return; }
+    box.innerHTML = rows.map((r,i) => `<article class="admin-aduan"><div class="admin-head"><span>${escapeHtml(r.token)}</span><b>${escapeHtml(r.status)}</b></div><h3>${escapeHtml(r.judul)}</h3><p><b>Nama:</b> ${escapeHtml(r.nama)} &nbsp; <b>Kategori:</b> ${escapeHtml(r.kategori)}</p><p>${escapeHtml(r.isi_aduan)}</p><textarea id="jawaban-${i}" placeholder="Tulis jawaban untuk masyarakat...">${escapeHtml(r.jawaban || "")}</textarea><button class="btn btn-primary" onclick="jawabAduan('${encodeURIComponent(r.token)}', ${i})">Simpan Jawaban</button></article>`).join("");
 }
 
 async function jawabAduan(encodedToken, i) {
     const token = decodeURIComponent(encodedToken); const jawaban = document.getElementById(`jawaban-${i}`).value.trim();
+    const password = sessionStorage.getItem("sepaduAdminPassword");
     if (!jawaban) return alert("Jawaban belum diisi.");
-    const data = new URLSearchParams({action:"answer", token, jawaban, password:ADMIN_PASSWORD});
+    if (!password) return alert("Sesi admin sudah berakhir. Silakan login kembali.");
+    const data = new URLSearchParams({action:"answer", token, jawaban, password});
     await fetch(ADUAN_SCRIPT_URL, {method:"POST", mode:"no-cors", body:data});
-    alert("Jawaban disimpan. Silakan muat ulang daftar aduan untuk memastikan perubahan.");
+    alert("Jawaban dikirim. Silakan muat ulang daftar aduan untuk melihat perubahan.");
     loadAduanAdmin();
 }
 
-if (document.getElementById("adminPanel") && sessionStorage.getItem("sepaduAdmin") === "1") {
+if (document.getElementById("adminPanel") && sessionStorage.getItem("sepaduAdmin") === "1" && sessionStorage.getItem("sepaduAdminPassword")) {
     document.getElementById("loginPanel").style.display = "none";
-    document.getElementById("adminPanel").style.display = "block"; loadAduanAdmin();
+    document.getElementById("adminPanel").style.display = "block";
+    loadAduanAdmin();
 }
