@@ -1361,7 +1361,7 @@ textarea {
 .reveal,
 .reveal-left,
 .reveal-right {
-    opacity: 1;
+    opacity: 0;
     transition:
         opacity .8s ease,
         transform .8s ease;
@@ -2242,7 +2242,17 @@ section.aduan-section #aduanMessage {
 }
 
 
-/* =====================================================
-   ADUAN, STATUS & ADMIN
-===================================================== */
-.aduan-result,.status-result{margin-top:18px;line-height:1.8}.status-card{max-width:800px}.status-box{padding:20px;border-radius:16px;margin-top:20px;line-height:1.7}.status-box.belum{background:#fff7e6;border:1px solid #f0d79a}.status-box.sudah{background:#eef9f0;border:1px solid #b9dfc0}.status-box p{margin:8px 0}.btn-secondary{display:inline-flex;align-items:center;justify-content:center;background:#eee9f8;color:#5d438f;border:0}.form-button + .form-button{margin-top:12px}.admin-page .section{min-height:70vh}.admin-toolbar{display:flex;gap:12px;justify-content:flex-end;margin-bottom:25px}.admin-aduan{background:#fff;border:1px solid #eee7ff;border-radius:22px;padding:25px;margin-bottom:18px;box-shadow:0 12px 35px rgba(89,61,139,.08)}.admin-head{display:flex;justify-content:space-between;gap:15px;margin-bottom:10px;color:#7651c9}.admin-aduan h3{margin:8px 0}.admin-aduan p{line-height:1.7}.admin-aduan textarea{width:100%;min-height:110px;padding:14px;border:1px solid #e4deed;border-radius:13px;resize:vertical;margin:10px 0 14px;font-family:inherit}.admin-aduan button{border:0;cursor:pointer}.admin-toolbar .btn{width:auto;padding:0 22px}@media(max-width:600px){.admin-toolbar{justify-content:stretch}.admin-toolbar .btn{flex:1}.admin-head{flex-direction:column;gap:5px}}
+/* ================= FIX: CONTENT SELALU TERLIHAT ================= */
+.reveal,
+.reveal-left,
+.reveal-right {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+/* Fallback hero background jika foto kampung tidak tersedia */
+.hero-background {
+    background:
+        linear-gradient(90deg, rgba(246,238,255,.96) 0%, rgba(246,238,255,.70) 35%, rgba(246,238,255,.10) 75%),
+        url("suasana.jpeg") center/cover;
+}
