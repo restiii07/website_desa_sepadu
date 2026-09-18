@@ -11,6 +11,7 @@
     <title>Kontak | Desa Sepadu</title>
 
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
 </head>
 
@@ -285,100 +286,53 @@
         </div>
 
 
-        <!-- ================= FORM ================= -->
-
+        <!-- ================= INFORMASI ADUAN ================= -->
         <div class="contact-form-box reveal-right">
-
-            <h2>
-                Kirim Pesan 💌
-            </h2>
-
-            <p>
-                Sampaikan pesan atau pertanyaan
-                kepada kami.
-            </p>
-
-
-            <form id="contactForm">
-
-                <div class="input-group">
-
-                    <label for="nama">
-                        Nama
-                    </label>
-
-                    <input
-                        type="text"
-                        id="nama"
-                        name="nama"
-                        placeholder="Masukkan nama"
-                        required>
-
-                </div>
-
-
-                <div class="input-group">
-
-                    <label for="email">
-                        Email
-                    </label>
-
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        placeholder="Masukkan email"
-                        required>
-
-                </div>
-
-
-                <div class="input-group">
-
-                    <label for="subjek">
-                        Subjek
-                    </label>
-
-                    <input
-                        type="text"
-                        id="subjek"
-                        name="subjek"
-                        placeholder="Subjek pesan"
-                        required>
-
-                </div>
-
-
-                <div class="input-group">
-
-                    <label for="pesan">
-                        Pesan
-                    </label>
-
-                    <textarea
-                        id="pesan"
-                        name="pesan"
-                        rows="5"
-                        placeholder="Tulis pesan..."
-                        required></textarea>
-
-                </div>
-
-
-                <button
-                    type="submit"
-                    class="btn btn-primary form-button">
-
-                    Kirim Pesan ✈
-
-                </button>
-
-            </form>
-
+            <h2>Butuh Bantuan? 💬</h2>
+            <p>Gunakan halaman ini untuk menghubungi Pemerintah Desa Sepadu. Untuk pengaduan resmi, silakan isi formulir aduan di bawah.</p>
+            <a href="#aduan" class="btn btn-primary form-button">Buat Aduan Masyarakat →</a>
+            <a href="#cek-aduan" class="btn btn-secondary form-button">Cek Status Aduan 🔎</a>
         </div>
 
     </div>
 
+</section>
+
+<!-- ================= ADUAN MASYARAKAT ================= -->
+<section class="section aduan-section" id="aduan">
+    <div class="section-heading reveal">
+        <span class="section-label">ADUAN MASYARAKAT</span>
+        <h2>Sampaikan Aduan<br><span>untuk Desa Sepadu</span></h2>
+        <p>Sampaikan kritik, saran, atau laporan. Setelah dikirim, Anda akan mendapatkan token untuk memantau jawaban aduan.</p>
+        <div class="heading-line">🌿</div>
+    </div>
+
+    <div class="aduan-card reveal">
+        <form id="aduanForm">
+            <div class="form-group"><label for="namaAduan">Nama</label><input type="text" id="namaAduan" name="nama" placeholder="Masukkan nama kamu" required></div>
+            <div class="form-group"><label for="kategori">Kategori Aduan</label><select id="kategori" name="kategori" required><option value="">Pilih kategori</option><option>Infrastruktur</option><option>Lingkungan</option><option>Pelayanan</option><option>Kebersihan</option><option>Lainnya</option></select></div>
+            <div class="form-group"><label for="judul">Judul Aduan</label><input type="text" id="judul" name="judul" placeholder="Contoh: Jalan desa rusak" required></div>
+            <div class="form-group"><label for="isi_aduan">Isi Aduan</label><textarea id="isi_aduan" name="isi_aduan" rows="5" placeholder="Tuliskan aduan atau saran kamu..." required></textarea></div>
+            <button type="submit" class="btn btn-primary">Kirim Aduan →</button>
+            <div id="aduanMessage" class="aduan-result" aria-live="polite"></div>
+        </form>
+    </div>
+</section>
+
+<!-- ================= CEK ADUAN ================= -->
+<section class="section soft-section" id="cek-aduan">
+    <div class="section-heading reveal">
+        <span class="section-label">CEK STATUS</span>
+        <h2>Cek Status <span>Aduan</span></h2>
+        <p>Masukkan token yang Anda dapatkan setelah mengirim aduan.</p>
+    </div>
+    <div class="aduan-card status-card reveal">
+        <form id="cekAduanForm">
+            <div class="form-group"><label for="tokenCek">Token Aduan</label><input type="text" id="tokenCek" placeholder="Contoh: DSP-AB12CD34" required></div>
+            <button type="submit" class="btn btn-primary">Cek Aduan 🔎</button>
+        </form>
+        <div id="statusResult" class="status-result" aria-live="polite"></div>
+    </div>
 </section>
 
 
@@ -413,6 +367,7 @@
             <a href="kehidupan.html">Kehidupan</a>
             <a href="budaya.html">Budaya</a>
             <a href="kontak.html">Kontak</a>
+            <a href="admin.html">Admin</a>
 
         </div>
 

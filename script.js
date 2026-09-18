@@ -378,50 +378,102 @@ floatingObjects.forEach((object, index) => {
 console.log(
     "🌿 Website Desa Sepadu berhasil dimuat."
 );
-const ADUAN_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbz1HKPutb6U1anVjnHkFsLC_YMzWJe24x7fRvM27RMueAeMKk3nI8XXr0_cs5en6GXw/exec";
+
+
+/* =====================================================
+   SISTEM ADUAN + TOKEN + ADMIN
+===================================================== */
+const ADUAN_SCRIPT_URL = "GANTI_DENGAN_URL_WEB_APP_GOOGLE_APPS_SCRIPT";
+const ADMIN_PASSWORD = "Sepadu2026!";
+
+function buatToken() {
+    const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    let token = "DSP-";
+    for (let i = 0; i < 8; i++) token += chars[Math.floor(Math.random() * chars.length)];
+    return token;
+}
+
+function setMessage(el, text, ok = true) {
+    if (!el) return;
+    el.innerHTML = text;
+    el.style.color = ok ? "#315b45" : "#b33a3a";
+}
 
 const aduanForm = document.getElementById("aduanForm");
-const aduanMessage = document.getElementById("aduanMessage");
-
 if (aduanForm) {
-    aduanForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        const submitButton = aduanForm.querySelector(
-            "button[type='submit']"
-        );
-
-        submitButton.disabled = true;
-        submitButton.textContent = "Mengirim...";
-
-        const formData = new FormData(aduanForm);
-
+    aduanForm.addEventListener("submit", async function(e) {
+        e.preventDefault();
+        const btn = aduanForm.querySelector("button[type=submit]");
+        const msg = document.getElementById("aduanMessage");
+        const token = buatToken();
+        btn.disabled = true; btn.textContent = "Mengirim...";
+        const data = new URLSearchParams(new FormData(aduanForm));
+        data.append("action", "submit"); data.append("token", token);
         try {
-            await fetch(ADUAN_SCRIPT_URL, {
-                method: "POST",
-                mode: "no-cors",
-                body: new URLSearchParams(formData)
-            });
-
-            aduanMessage.textContent =
-                "Aduan berhasil dikirim. Terima kasih sudah menyampaikan laporan.";
-
-            aduanMessage.style.color = "#315b45";
-
+            await fetch(ADUAN_SCRIPT_URL, { method: "POST", mode: "no-cors", body: data });
+            setMessage(msg, `<strong>Aduan berhasil dikirim!</strong><br>Token Anda: <strong>${token}</strong><br><small>Simpan token ini untuk mengecek jawaban aduan.</small>`);
             aduanForm.reset();
-
-        } catch (error) {
-            aduanMessage.textContent =
-                "Aduan gagal dikirim. Silakan coba lagi.";
-
-            aduanMessage.style.color = "#b33a3a";
-
-            console.error("Error:", error);
-
-        } finally {
-            submitButton.disabled = false;
-            submitButton.textContent = "Kirim Aduan →";
-        }
+        } catch (err) {
+            setMessage(msg, "Aduan gagal dikirim. Periksa URL Google Apps Script.", false);
+        } finally { btn.disabled = false; btn.textContent = "Kirim Aduan →"; }
     });
+}
+
+const cekForm = document.getElementById("cekAduanForm");
+if (cekForm) {
+    cekForm.addEventListener("submit", async function(e) {
+        e.preventDefault();
+        const token = document.getElementById("tokenCek").value.trim().toUpperCase();
+        const result = document.getElementById("statusResult");
+        result.innerHTML = "Memeriksa...";
+        try {
+            const res = await fetch(`${ADUAN_SCRIPT_URL}?action=check&token=${encodeURIComponent(token)}`);
+            const d = await res.json();
+            if (!d.found) { result.innerHTML = `<div class="status-box belum">Token tidak ditemukan. Pastikan token benar.</div>`; return; }
+            const sudah = String(d.status).toLowerCase() === "sudah dijawab";
+            result.innerHTML = `<div class="status-box ${sudah ? "sudah" : "belum"}"><strong>${sudah ? "✓ Sudah dijawab" : "⏳ Belum dijawab"}</strong><p><b>Judul:</b> ${escapeHtml(d.judul || "-")}</p>${sudah ? `<p><b>Jawaban admin:</b><br>${escapeHtml(d.jawaban || "-")}</p>` : `<p>Aduan Anda masih menunggu jawaban dari admin Desa Sepadu.</p>`}</div>`;
+        } catch (err) { result.innerHTML = `<div class="status-box belum">Tidak dapat memeriksa status. Pastikan URL Web App sudah diisi.</div>`; }
+    });
+}
+
+function escapeHtml(str) { return String(str).replace(/[&<>'"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[c])); }
+
+/* Admin page */
+const adminLogin = document.getElementById("adminLogin");
+if (adminLogin) {
+    adminLogin.addEventListener("submit", e => {
+        e.preventDefault();
+        const pass = document.getElementById("adminPassword").value;
+        if (pass === ADMIN_PASSWORD) {
+            sessionStorage.setItem("sepaduAdmin", "1");
+            document.getElementById("loginPanel").style.display = "none";
+            document.getElementById("adminPanel").style.display = "block";
+            loadAduanAdmin();
+        } else document.getElementById("loginMessage").textContent = "Password salah.";
+    });
+}
+
+async function loadAduanAdmin() {
+    const box = document.getElementById("adminList"); if (!box) return;
+    box.innerHTML = "Memuat data aduan...";
+    try {
+        const res = await fetch(`${ADUAN_SCRIPT_URL}?action=list&password=${encodeURIComponent(ADMIN_PASSWORD)}`);
+        const rows = await res.json();
+        if (!Array.isArray(rows) || !rows.length) { box.innerHTML = "Belum ada aduan."; return; }
+        box.innerHTML = rows.map((r,i) => `<article class="admin-aduan"><div class="admin-head"><span>${escapeHtml(r.token)}</span><b>${escapeHtml(r.status)}</b></div><h3>${escapeHtml(r.judul)}</h3><p><b>Nama:</b> ${escapeHtml(r.nama)} &nbsp; <b>Kategori:</b> ${escapeHtml(r.kategori)}</p><p>${escapeHtml(r.isi_aduan)}</p><textarea id="jawaban-${i}" placeholder="Tulis jawaban untuk masyarakat...">${escapeHtml(r.jawaban || "")}</textarea><button class="btn btn-primary" onclick="jawabAduan('${encodeURIComponent(r.token)}', ${i})">Simpan Jawaban</button></article>`).join("");
+    } catch(e) { box.innerHTML = "Gagal mengambil data. Periksa URL Web App."; }
+}
+
+async function jawabAduan(encodedToken, i) {
+    const token = decodeURIComponent(encodedToken); const jawaban = document.getElementById(`jawaban-${i}`).value.trim();
+    if (!jawaban) return alert("Jawaban belum diisi.");
+    const data = new URLSearchParams({action:"answer", token, jawaban, password:ADMIN_PASSWORD});
+    await fetch(ADUAN_SCRIPT_URL, {method:"POST", mode:"no-cors", body:data});
+    alert("Jawaban disimpan. Silakan muat ulang daftar aduan untuk memastikan perubahan.");
+    loadAduanAdmin();
+}
+
+if (document.getElementById("adminPanel") && sessionStorage.getItem("sepaduAdmin") === "1") {
+    document.getElementById("loginPanel").style.display = "none";
+    document.getElementById("adminPanel").style.display = "block"; loadAduanAdmin();
 }
