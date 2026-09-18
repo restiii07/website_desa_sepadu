@@ -5,19 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Aduan | Desa Sepadu</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
-        .admin-wrap{max-width:1000px;margin:120px auto 50px;padding:20px}
+        .admin-wrap{max-width:1000px;margin:120px auto 60px;padding:20px}
         .admin-panel{background:#fff;border-radius:20px;padding:28px;box-shadow:0 15px 40px rgba(0,0,0,.08);margin-bottom:20px}
-        .admin-row{border:1px solid #eee;border-radius:15px;padding:18px;margin:14px 0}
-        .admin-row textarea{width:100%;box-sizing:border-box;padding:12px;border:1px solid #ddd;border-radius:10px;min-height:100px;margin:10px 0;font-family:inherit}
-        .admin-input{width:100%;box-sizing:border-box;padding:13px;margin:12px 0;border:1px solid #ddd;border-radius:10px}
+        .admin-row{border:1px solid #eee;border-radius:15px;padding:20px;margin:15px 0}
+        .admin-row textarea{width:100%;box-sizing:border-box;padding:12px;border:1px solid #ddd;border-radius:10px;min-height:110px;margin:12px 0;font-family:inherit;resize:vertical}
+        .admin-input{width:100%;box-sizing:border-box;padding:13px;margin:12px 0;border:1px solid #ddd;border-radius:10px;font:inherit}
         .admin-btn{padding:12px 20px;border:0;border-radius:10px;cursor:pointer;background:#7651d1;color:#fff;font-weight:600}
-        .admin-hidden{display:none}
+        .admin-btn:disabled{opacity:.6;cursor:not-allowed}
+        .admin-hidden{display:none!important}
         .admin-badge{display:inline-block;padding:5px 10px;border-radius:20px;background:#f1ecff;margin:6px 0}
-        .admin-error{color:#c0392b}
-        .admin-success{color:#16834b}
+        .admin-error{color:#c0392b}.admin-success{color:#16834b}
+        .admin-top{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+        .admin-empty{padding:20px;border-radius:12px;background:#f7f5fb}
     </style>
 </head>
 <body>
@@ -48,46 +49,109 @@
     </div>
 
     <div class="admin-panel admin-hidden" id="dashboard">
-        <span class="section-label">PENGELOLAAN ADUAN</span>
-        <h1>📋 Daftar Aduan Masyarakat</h1>
-        <p>Admin dapat melihat aduan dan memberikan jawaban.</p>
-        <div id="list"></div>
+        <div class="admin-top">
+            <div>
+                <span class="section-label">PENGELOLAAN ADUAN</span>
+                <h1>📋 Daftar Aduan Masyarakat</h1>
+                <p>Admin dapat melihat aduan dan memberikan jawaban.</p>
+            </div>
+            <button class="admin-btn" id="refreshBtn">↻ Muat Ulang</button>
+        </div>
+        <div id="list"><div class="admin-empty">Memuat aduan...</div></div>
     </div>
 </main>
 
 <script src="script.js"></script>
 <script>
-const PASSWORD='Sepadu2026!';
-const loginPanel=document.getElementById('loginPanel');
-const dashboard=document.getElementById('dashboard');
-const list=document.getElementById('list');
-document.getElementById('loginBtn').addEventListener('click',()=>{
-    const pass=document.getElementById('adminPassword').value;
-    if(pass===PASSWORD){
-        loginPanel.classList.add('admin-hidden');
-        dashboard.classList.remove('admin-hidden');
-        renderAduan();
-    }else{document.getElementById('loginMsg').textContent='Password salah.';}
-});
-document.getElementById('adminPassword').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('loginBtn').click()});
-function renderAduan(){
-    const keys=Object.keys(localStorage).filter(k=>k.startsWith('aduan_'));
-    if(!keys.length){list.innerHTML='<p>Belum ada aduan pada browser ini.</p>';return;}
-    list.innerHTML='';
-    keys.forEach(k=>{
-        let x; try{x=JSON.parse(localStorage.getItem(k));}catch(e){return;}
-        const row=document.createElement('div'); row.className='admin-row';
-        row.innerHTML=`<strong>${escapeHtml(x.token||'')}</strong><br><span class="admin-badge">${escapeHtml(x.status||'Belum dijawab')}</span><p><b>${escapeHtml(x.nama||'')}</b></p><p><b>${escapeHtml(x.judul||'')}</b></p><p>${escapeHtml(x.aduan||'')}</p><textarea placeholder="Tulis jawaban admin">${escapeHtml(x.jawaban||'')}</textarea><br><button class="admin-btn">💬 Simpan Jawaban</button>`;
-        row.querySelector('button').addEventListener('click',()=>{
-            x.jawaban=row.querySelector('textarea').value;
-            x.status=x.jawaban.trim()?'Sudah dijawab':'Belum dijawab';
-            localStorage.setItem(k,JSON.stringify(x));
-            renderAduan();
-        });
-        list.appendChild(row);
-    });
+const ADUAN_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwd0QoKtKUalUxUg7uIoKCjoiIgQref7khPk0RsajnvT6elws32OZEl_12Xi70ZoNgf/exec";
+const PASSWORD = "Sepadu2026!";
+const loginPanel = document.getElementById("loginPanel");
+const dashboard = document.getElementById("dashboard");
+const list = document.getElementById("list");
+const passwordInput = document.getElementById("adminPassword");
+const loginMsg = document.getElementById("loginMsg");
+
+function esc(value){
+    return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
-function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+
+async function loginAdmin(){
+    const pass = passwordInput.value;
+    if(pass !== PASSWORD){
+        loginMsg.textContent = "Password salah.";
+        return;
+    }
+    loginMsg.textContent = "";
+    loginPanel.classList.add("admin-hidden");
+    dashboard.classList.remove("admin-hidden");
+    sessionStorage.setItem("sepaduAdminLogin", "1");
+    await renderAduan();
+}
+
+document.getElementById("loginBtn").addEventListener("click", loginAdmin);
+passwordInput.addEventListener("keydown", e => { if(e.key === "Enter") loginAdmin(); });
+document.getElementById("refreshBtn").addEventListener("click", renderAduan);
+
+async function renderAduan(){
+    list.innerHTML = '<div class="admin-empty">Memuat aduan...</div>';
+    try{
+        const response = await fetch(`${ADUAN_SCRIPT_URL}?action=list&password=${encodeURIComponent(PASSWORD)}`);
+        const result = await response.json();
+
+        if(!Array.isArray(result)){
+            list.innerHTML = '<div class="admin-empty">Data aduan belum dapat dimuat.</div>';
+            return;
+        }
+
+        if(!result.length){
+            list.innerHTML = '<div class="admin-empty">Belum ada aduan masyarakat.</div>';
+            return;
+        }
+
+        list.innerHTML = result.map((x,index) => `
+            <div class="admin-row">
+                <strong>${esc(x.token)}</strong><br>
+                <span class="admin-badge">${esc(x.status || "Belum dijawab")}</span>
+                <p><b>Nama:</b> ${esc(x.nama)}</p>
+                <p><b>Kategori:</b> ${esc(x.kategori || "-")}</p>
+                <p><b>Judul:</b> ${esc(x.judul)}</p>
+                <p><b>Isi Aduan:</b><br>${esc(x.isi_aduan).replace(/\n/g,"<br>")}</p>
+                <p><b>Tanggal:</b> ${esc(x.waktu)}</p>
+                <textarea id="jawaban-${index}" placeholder="Tulis jawaban admin...">${esc(x.jawaban || "")}</textarea>
+                <button class="admin-btn" onclick="simpanJawaban('${encodeURIComponent(x.token)}', ${index})">💬 Simpan Jawaban</button>
+            </div>
+        `).join("");
+    }catch(error){
+        console.error(error);
+        list.innerHTML = '<div class="admin-empty">Gagal terhubung ke Apps Script. Periksa deployment Web App.</div>';
+    }
+}
+
+async function simpanJawaban(encodedToken,index){
+    const token = decodeURIComponent(encodedToken);
+    const textarea = document.getElementById(`jawaban-${index}`);
+    const jawaban = textarea.value.trim();
+    if(!jawaban){ alert("Jawaban tidak boleh kosong."); return; }
+
+    try{
+        await fetch(ADUAN_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: new URLSearchParams({action:"answer", password:PASSWORD, token, jawaban})
+        });
+        alert("Jawaban dikirim. Silakan muat ulang daftar aduan untuk melihat status terbaru.");
+        await renderAduan();
+    }catch(error){
+        console.error(error);
+        alert("Jawaban gagal dikirim. Periksa koneksi Apps Script.");
+    }
+}
+
+if(sessionStorage.getItem("sepaduAdminLogin") === "1"){
+    loginPanel.classList.add("admin-hidden");
+    dashboard.classList.remove("admin-hidden");
+    renderAduan();
+}
 </script>
 </body>
 </html>
